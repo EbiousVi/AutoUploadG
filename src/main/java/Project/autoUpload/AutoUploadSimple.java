@@ -1,5 +1,7 @@
-package Project;
+package Project.autoUpload;
 
+import Project.filesWalker.FilesWalkerSmall;
+import Project.driver.Driver;
 import org.openqa.selenium.WebDriver;
 
 import java.util.concurrent.TimeUnit;

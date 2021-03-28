@@ -1,4 +1,4 @@
-package Project;
+package Project.filesWalker;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -8,13 +8,13 @@ import java.util.TreeMap;
 
 public class FilesWalker extends SimpleFileVisitor<Path> {
     //KEY = PATH, VALUE = FILENAME;
-    static Map<String, String> techMap = new TreeMap<>();
-    static Map<String, String> qualMap = new TreeMap<>();
-    static Map<String, String> commMap = new TreeMap<>();
+    public static Map<String, String> techMap = new TreeMap<>();
+    public static Map<String, String> qualMap = new TreeMap<>();
+    public static Map<String, String> commMap = new TreeMap<>();
 
-    static long techPreVisitDirSize;
-    static long qualPreVisitDirSize;
-    static long commPreVisitDirSize;
+    public static long techPreVisitDirSize;
+    public static long qualPreVisitDirSize;
+    public static long commPreVisitDirSize;
 
     @Override
     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
