@@ -22,13 +22,13 @@ public class AutoUploadTriple extends AutoUpload {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        AutoUpload autoUpload = new AutoUpload();
+        AutoUpload autoUpload = new AutoUploadTriple();
         autoUpload.setDirPath(new FilesWalkerBig());
         String url = autoUpload.setUrl();
 
         WebDriver driver = Driver.getChromeWebDriver();
         driver.get(url);
-        TimeUnit.MILLISECONDS.sleep(1000);
+        TimeUnit.MILLISECONDS.sleep(10000);
 
         autoUpload.uploadTechPart(driver);
         autoUpload.clickToTransition(driver, qualXpath);

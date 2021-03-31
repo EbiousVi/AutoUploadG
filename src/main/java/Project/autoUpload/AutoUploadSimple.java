@@ -9,14 +9,14 @@ import java.util.concurrent.TimeUnit;
 public class AutoUploadSimple extends AutoUpload {
 
     public static void main(String[] args) throws InterruptedException {
-        AutoUpload autoUpload = new AutoUpload();
+        AutoUpload autoUpload = new AutoUploadSimple();
         autoUpload.setDirPath(new FilesWalkerSmall());
 
         String url = autoUpload.setUrl();
 
         WebDriver driver = Driver.getChromeWebDriver();
         driver.get(url);
-        TimeUnit.MILLISECONDS.sleep(1000);
+        TimeUnit.MILLISECONDS.sleep(10000);
 
         autoUpload.uploadTechPart(driver);
         autoUpload.uploadQualPart(driver);
