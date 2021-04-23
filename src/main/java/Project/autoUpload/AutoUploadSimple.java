@@ -1,5 +1,6 @@
 package Project.autoUpload;
 
+import Project.driver.options.WIN10Options;
 import Project.filesWalker.FilesWalkerSmall;
 import Project.driver.Driver;
 import org.openqa.selenium.WebDriver;
@@ -14,7 +15,7 @@ public class AutoUploadSimple extends AutoUpload {
 
         String url = autoUpload.setUrl();
 
-        WebDriver driver = Driver.getChromeWebDriver();
+        WebDriver driver = Driver.getChromeWebDriver(new WIN10Options());
         driver.get(url);
         TimeUnit.MILLISECONDS.sleep(10000);
 

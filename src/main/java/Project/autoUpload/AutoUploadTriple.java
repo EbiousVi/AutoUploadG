@@ -1,7 +1,9 @@
 package Project.autoUpload;
 
+import Project.driver.options.WIN10Options;
 import Project.filesWalker.FilesWalkerBig;
 import Project.driver.Driver;
+import Project.filesWalker.FilesWalkerSmall;
 import org.openqa.selenium.WebDriver;
 
 import java.util.concurrent.TimeUnit;
@@ -23,10 +25,10 @@ public class AutoUploadTriple extends AutoUpload {
 
     public static void main(String[] args) throws InterruptedException {
         AutoUpload autoUpload = new AutoUploadTriple();
-        autoUpload.setDirPath(new FilesWalkerBig());
+        autoUpload.setDirPath(new FilesWalkerSmall());
         String url = autoUpload.setUrl();
 
-        WebDriver driver = Driver.getChromeWebDriver();
+        WebDriver driver = Driver.getChromeWebDriver(new WIN10Options());
         driver.get(url);
         TimeUnit.MILLISECONDS.sleep(10000);
 

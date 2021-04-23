@@ -42,22 +42,22 @@ public class AutoUpload {
         printResult();
     }
 
-     void countUploadedTechFiles(WebDriver driver) {
+    void countUploadedTechFiles(WebDriver driver) {
         List<WebElement> uploadedTechFiles = driver.findElements(By.xpath("//*[text() = 'Техническое предложение и иные документы']/ancestor::fieldset//a[contains(@href,'file')]"));
         recountUploadedFiles += uploadedTechFiles.size();
     }
 
-     void countUploadedQualFiles(WebDriver driver) {
+    void countUploadedQualFiles(WebDriver driver) {
         List<WebElement> uploadedQualFiles = driver.findElements(By.xpath("//*[text() = 'Иные документы']/ancestor::fieldset//a[contains(@href,'file')]"));
         recountUploadedFiles += uploadedQualFiles.size();
     }
 
-     void countUploadedCommFiles(WebDriver driver) {
+    void countUploadedCommFiles(WebDriver driver) {
         List<WebElement> uploadedCommFiles = driver.findElements(By.xpath("//fieldset[@id='price_offer_docs_wrapper_id']//a[contains(@href,'file')]"));
         recountUploadedFiles += uploadedCommFiles.size();
     }
 
-     void printResult() {
+    void printResult() {
         System.out.println("Maps.size - " + (techMap.size() + qualMap.size() + commMap.size()));
         System.out.println("Вовремя загрузки = " + downloadCount);
         System.out.println("После загрузки = " + recountUploadedFiles);

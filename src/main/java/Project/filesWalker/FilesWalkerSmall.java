@@ -22,6 +22,6 @@ public class FilesWalkerSmall extends FilesWalker {
 
     public static void main(String[] args) throws IOException {
         FilesWalkerSmall walker = new FilesWalkerSmall();
-        walker.startTest("/media/v/Samsung USB1/OTHER/TEST", walker);
+        walker.startTest("F:\\В РАБОТЕ\\04.21 ГПБ МАЛЫЙ ЭЛИСТА ЭХЗ ОРИОН", walker);
     }
 }
