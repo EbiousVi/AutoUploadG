@@ -1,5 +1,6 @@
 package project.autoUpload;
 
+import project.filesWalker.Directories;
 import project.filesWalker.FilesWalker;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -14,8 +15,9 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class AutoUpload {
     private final FilesWalker walker;
-    private int downloadCount;
-    private int recountUploadedFiles;
+    private int countFilesBeforeUpload;
+    private int countFilesDuringUpload;
+    private int countFilesAfterUpload;
 
     public AutoUpload(FilesWalker walker) {
         this.walker = walker;
@@ -25,39 +27,48 @@ public abstract class AutoUpload {
         return walker;
     }
 
-    public abstract void execute(WebDriver driver);
+    public abstract void start(WebDriver driver, Map<Directories, Boolean> parts) throws InterruptedException;
 
-    abstract void validation(WebDriver driver);
+    public abstract void executeTechPart(WebDriver driver) throws InterruptedException;
+
+    public abstract void executeQualPart(WebDriver driver) throws InterruptedException;
+
+    public abstract void executeCommPart(WebDriver driver) throws InterruptedException;
 
     void countUploadedTechFiles(WebDriver driver) {
         List<WebElement> uploadedTechFiles = driver.findElements(By.xpath("//*[text() = 'Техническое предложение и иные документы']/ancestor::fieldset//a[contains(@href,'file')]"));
-        recountUploadedFiles += uploadedTechFiles.size();
+        countFilesAfterUpload += uploadedTechFiles.size();
     }
 
     void countUploadedQualFiles(WebDriver driver) {
         List<WebElement> uploadedQualFiles = driver.findElements(By.xpath("//*[text() = 'Иные документы']/ancestor::fieldset//a[contains(@href,'file')]"));
-        recountUploadedFiles += uploadedQualFiles.size();
+        countFilesAfterUpload += uploadedQualFiles.size();
     }
 
     void countUploadedCommFiles(WebDriver driver) {
         List<WebElement> uploadedCommFiles = driver.findElements(By.xpath("//fieldset[@id='price_offer_docs_wrapper_id']//a[contains(@href,'file')]"));
-        recountUploadedFiles += uploadedCommFiles.size();
+        countFilesAfterUpload += uploadedCommFiles.size();
     }
 
-    void printResult() {
-        System.out.println("Перед загрузкой = " + (walker.techMap.size() + walker.qualMap.size() + walker.commMap.size()));
-        System.out.println("Загружено = " + downloadCount);
-        System.out.println("После загрузки = " + recountUploadedFiles);
+    void printResult(Map<Directories, Boolean> parts) {
+        if (parts.get(Directories.TECH)) countFilesBeforeUpload += walker.techMap.size();
+        if (parts.get(Directories.QUAL)) countFilesBeforeUpload += walker.qualMap.size();
+        if (parts.get(Directories.COMM)) countFilesBeforeUpload += walker.commMap.size();
+        System.out.println();
+        System.out.println("Перед загрузкой = " + countFilesBeforeUpload);
+        System.out.println("Загружено = " + countFilesDuringUpload);
+        System.out.println("После загрузки = " + countFilesAfterUpload);
+        System.out.println();
     }
 
     void clickToTransition(WebDriver driver, String xPath) throws InterruptedException {
-        WebElement commPart = driver.findElement(By.xpath(xPath));
+        WebElement clickableElem = driver.findElement(By.xpath(xPath));
         JavascriptExecutor executor = (JavascriptExecutor) driver;
-        executor.executeScript("arguments[0].click();", commPart);
+        executor.executeScript("arguments[0].click();", clickableElem);
         TimeUnit.MILLISECONDS.sleep(3000);
     }
 
-    void uploadCommFIle(WebDriver driver) throws InterruptedException {
+    void uploadCommFile(WebDriver driver) throws InterruptedException {
         for (Map.Entry<String, String> pair : walker.commMap.entrySet()) {
             WebElement commFileName = driver.findElement(By.xpath("//fieldset[@id='price_offer_docs_wrapper_id']//input[@type='text']"));
             WebElement commFile = driver.findElement(By.xpath("//fieldset[@id='price_offer_docs_wrapper_id']//input[@type='file'][@class='x-form-file']"));
@@ -91,9 +102,9 @@ public abstract class AutoUpload {
     }
 
     private void waiting(WebDriver driver) throws InterruptedException {
-        WebDriverWait wait = new WebDriverWait(driver, 75, 2000);
+        WebDriverWait wait = new WebDriverWait(driver, 120, 2000);
         wait.until(ExpectedConditions.invisibilityOfElementWithText(By.xpath("//*[text() = 'Загрузка файла']"), "Загрузка файла"));
-        downloadCount++;
+        countFilesDuringUpload++;
         TimeUnit.MILLISECONDS.sleep(1000);
     }
 }

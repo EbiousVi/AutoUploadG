@@ -11,9 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Driver {
-    private static final String WIN10 = "win10";
-    private static final String WIN8 = "win8";
-    private static final String LINUX = "linux";
+    private static final String WIN10 = "вин10";
+    private static final String WIN8 = "вин8";
+    private static final String LINUX = "линукс";
     private static final Map<String, Options> options = new HashMap<>();
 
     public static WebDriver getChromeWebDriver(String option) {
@@ -26,6 +26,6 @@ public class Driver {
         if (options.containsKey(option)) {
             return new ChromeDriver(options.get(option).getChromeOption());
         }
-        throw new RuntimeException("NOT POSSIBLE TO COME HERE");
+        throw new RuntimeException("--> Нет подходящего файла конфигурации для ОС");
     }
 }

@@ -2,33 +2,38 @@ package project.filesWalker;
 
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Map;
 
 public class FilesWalkerSmall extends FilesWalker {
 
+    public FilesWalkerSmall(Map<Directories, Boolean> parts) {
+        super(parts);
+    }
+
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
-        if (file.getParent().toString().contains("Техника")) {
-            techMap.put(file.toAbsolutePath().toString(), file.getFileName().toString().replaceAll("\\.[a-zA-Z].+", ""));
+        if (file.getFileName().toString().startsWith("~$")) return FileVisitResult.CONTINUE;
+
+        if (parts.get(Directories.TECH)) {
+            if (file.getParent().toString().contains(Directories.TECH.name)) {
+                techMap.put(file.toAbsolutePath().toString(), file.getFileName().toString().replaceAll("\\.[a-zA-Z].+", ""));
+            }
         }
-        if (file.getParent().toString().contains("Квалификация")) {
-            qualMap.put(file.toAbsolutePath().toString(), file.getFileName().toString().replaceAll("\\.[a-zA-Z].+", ""));
+        if (parts.get(Directories.QUAL)) {
+            if (file.getParent().toString().contains(Directories.QUAL.name)) {
+                qualMap.put(file.toAbsolutePath().toString(), file.getFileName().toString().replaceAll("\\.[a-zA-Z].+", ""));
+            }
         }
-        if (file.getParent().toString().contains("Коммерческая")) {
-            commMap.put(file.toAbsolutePath().toString(), file.getFileName().toString().replaceAll("\\.[a-zA-Z].+", ""));
+        if (parts.get(Directories.COMM)) {
+            if (file.getParent().toString().contains(Directories.COMM.name)) {
+                commMap.put(file.toAbsolutePath().toString(), file.getFileName().toString().replaceAll("\\.[a-zA-Z].+", ""));
+            }
         }
         return FileVisitResult.CONTINUE;
     }
 
     @Override
-    public boolean startFiltration() {
-        if (isEmptyDirs()) {
-            System.out.println("Пустая папка! Попробуйте снова");
-            return false;
-        }
-        if (!isCorrectFillingMaps()) {
-            System.out.println("Число собранных файлов не соответствует числу находящихся в папке");
-            return false;
-        }
-        return true;
+    public boolean doFilter() {
+        return !isEmptyDirs();
     }
 }

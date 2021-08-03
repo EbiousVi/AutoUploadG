@@ -1,5 +1,6 @@
 package project.autoUpload;
 
+import project.filesWalker.Directories;
 import project.filesWalker.FilesWalkerBig;
 import project.filesWalker.FilesWalkerSmall;
 
@@ -12,17 +13,26 @@ public class AutoUploadFactory {
     private static final String SMALL = "мал";
     private static final String SMALL3 = "мал3";
 
-    public static AutoUpload getAutoUploadInstance(String type) {
-        if (types.isEmpty()) {
-            types.put(BIG, new AutoUploadTriple(new FilesWalkerBig()));
-            types.put(SMALL, new AutoUploadSimple(new FilesWalkerSmall()));
-            types.put(SMALL3, new AutoUploadTriple(new FilesWalkerSmall()));
+    public static AutoUpload getAutoUploadInstance(String type, Map<Directories, Boolean> parts) {
+        if (type.equals(BIG)) {
+            if (types.get(BIG) == null) {
+                types.put(BIG, new AutoUploadTriple(new FilesWalkerBig(parts)));
+            }
+            return types.get(BIG);
         }
-
-        if (types.containsKey(type.toLowerCase())) {
-            return types.get(type);
+        if (type.equals(SMALL)) {
+            if (types.get(SMALL) == null) {
+                types.put(SMALL, new AutoUploadSimple(new FilesWalkerSmall(parts)));
+            }
+            return types.get(SMALL);
         }
-        throw new RuntimeException("NOT POSSIBLE TO COME HERE");
+        if (type.equals(SMALL3)) {
+            if (types.get(SMALL3) == null) {
+                types.put(SMALL3, new AutoUploadTriple(new FilesWalkerSmall(parts)));
+            }
+            return types.get(SMALL3);
+        }
+        throw new RuntimeException("--> Не возможно создать экземпляр Автозагрузки");
     }
 
 }
